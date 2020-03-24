@@ -1,10 +1,12 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import Museum from './glTF-Binary/museum.glb'
+import Earth from './javascript/Earth.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { TweenMax } from 'gsap'
+import { Vector3 } from 'three'
 
-
+console.log(Earth)
 /**
  * Sizes
  */
@@ -22,8 +24,7 @@ scene.background = new THREE.Color(0xffffff)
  * Camera
  */
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 20)
-camera.position.set(0, 6, 0) 
-
+camera.position.set(0, 6, 0)
 scene.add(camera)
 
 
@@ -91,10 +92,10 @@ gltfLoader.load(
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.3)
 scene.add(ambientLight)
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2)
-const directionalLight2 = new THREE.DirectionalLight(0xffffff, 1.2)
-const directionalLight3 = new THREE.DirectionalLight(0xffffff, 1.2)
-const directionalLight4 = new THREE.DirectionalLight(0xffffff, 1.2)
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1)
+const directionalLight2 = new THREE.DirectionalLight(0xffffff, 1)
+const directionalLight3 = new THREE.DirectionalLight(0xffffff, 1)
+const directionalLight4 = new THREE.DirectionalLight(0xffffff, 1)
 
 
 
@@ -117,5 +118,11 @@ const helper2 = new THREE.DirectionalLightHelper( directionalLight2, 5 );
 
 scene.add( helper );
 scene.add( helper2 );
+
+// EARTH 
+
+const earth = new Earth()
+scene.add(earth.group)
+camera.lookAt(earth.group.position)
 
 
