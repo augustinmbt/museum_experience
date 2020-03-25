@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import Museum from './glTF-Binary/museum.glb'
 import Earth from './javascript/Earth.js'
+import Astronaut from './javascript/Astronaut.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { TweenMax } from 'gsap'
 import { Vector3 } from 'three'
@@ -69,18 +70,18 @@ renderer.render(scene, camera)
 
 loop()
 
-const gltfLoader = new GLTFLoader()
-gltfLoader.load(
-    Museum, 
-    (gltf) =>
-    {
-        while(gltf.scene.children.length)
-        {
-            const child = gltf.scene.children[0]
-            scene.add(child)
-        }
-    }
-)
+// const gltfLoader = new GLTFLoader()
+// gltfLoader.load(
+//     Museum, 
+//     (gltf) =>
+//     {
+//         while(gltf.scene.children.length)
+//         {
+//             const child = gltf.scene.children[0]
+//             scene.add(child)
+//         }
+//     }
+// )
 
 /**
  * Camera Controls
@@ -123,6 +124,9 @@ scene.add( helper2 );
 
 const earth = new Earth()
 scene.add(earth.group)
-camera.lookAt(earth.group.position)
+
+const astronaut = new Astronaut()
+scene.add(astronaut.group)
+
 
 
