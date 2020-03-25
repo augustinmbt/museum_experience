@@ -1,29 +1,26 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import EarthModel from '../models/glTF-Binary/fusee.glb'
+import JupiterModel from '../models/glTF-Binary/jupiter2.glb'
 
-export default class Rocket
+export default class Jupiter
 {
     constructor()
     {
-        this.group = new THREE.Object3D()
+        this.group = new THREE.Group()
 
         const gltfLoader = new GLTFLoader()
         gltfLoader.load(
-            EarthModel, 
+        JupiterModel, 
             (gltf) =>
             {
                 while(gltf.scene.children.length)
                 {
                     const child = gltf.scene.children[0]
-                    this.group.scale.set(0.4, 0.4, 0.4)
-                    this.group.position.set(3, 1.82, 0)
-                    this.group.rotateY(Math.PI * 0.9)
+                    this.group.scale.set(0.05, 0.05, 0.05)
+                    this.group.position.set(2.3, 4.8, -1.3)
                     this.group.add(child)
                 }
             }
         )
-
     }
 }
-

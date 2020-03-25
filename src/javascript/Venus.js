@@ -1,8 +1,8 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import AsteroidsModel from '../models/glTF-Binary/asteroide.glb'
+import VenusModel from '../models/glTF-Binary/venus.glb'
 
-export default class Asteroids
+export default class Venus
 {
     constructor()
     {
@@ -10,14 +10,14 @@ this.group = new THREE.Group()
 
 const gltfLoader = new GLTFLoader()
 gltfLoader.load(
-    AsteroidsModel, 
+    VenusModel, 
     (gltf) =>
     {
         while(gltf.scene.children.length)
         {
             const child = gltf.scene.children[0]
-            this.group.scale.set(0.02, 0.02, 0.02)
-            this.group.position.set(- 2, 3.8, - 1.2)
+            this.group.scale.set(0.015, 0.015, 0.015)
+            this.group.position.set(-1, 5.5, 0.7)
             this.group.add(child)
         }
     }

@@ -17,7 +17,8 @@ gltfLoader.load(
         {
             const child = gltf.scene.children[0]
             this.group.scale.set(1.1, 1.1, 1.1)
-            this.group.position.set(- 2.7, 3.8, - 1.2)
+            this.group.position.set(- 2.3, 3.9, - 1.1)
+            this.group.rotateX(Math.PI * 0.5)
             this.group.add(child)
         }
     }
