@@ -17,6 +17,8 @@ import Mars from './javascript/Mars.js'
 import Neptune from './javascript/Neptune.js'
 import Jupiter from './javascript/Jupiter.js'
 import Venus from './javascript/Venus.js'
+import Saturn from './javascript/Saturn.js'
+
 
 import Ufo from './javascript/Ufo.js'
 import Asteroids from './javascript/asteroids/Asteroids.js'
@@ -71,6 +73,14 @@ home.scene.add(uranus.group)
 const jupiter = new Jupiter()
 home.scene.add(jupiter.group)
 
+//Neptune 
+const neptune = new Neptune()
+home.scene.add(neptune.group)
+
+//Saturne 
+const saturn = new Saturn()
+home.scene.add(saturn.group)
+
 //Venus
 const venus = new Venus()
 home.scene.add(venus.group)
@@ -112,9 +122,7 @@ home.scene.add(sign1.group)
 const sign2 = new Sign2()
 home.scene.add(sign2.group)
 
-//Neptune 
-const neptune = new Neptune()
-home.scene.add(neptune.group)
+
 
 //Astronaut
 const astronaut = new Astronaut()

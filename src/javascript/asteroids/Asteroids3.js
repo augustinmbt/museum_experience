@@ -17,7 +17,7 @@ export default class Asteroids3
                 {
                     const child = gltf.scene.children[0]
                     this.group.scale.set(0.02, 0.02, 0.02)
-                    this.group.position.set(1.3, 3.5, - 1.4)
+                    this.group.position.set(1.5, 3.9, - 1.25)
                     this.group.rotateY (Math.PI)
                     this.group.add(child)
                 }
