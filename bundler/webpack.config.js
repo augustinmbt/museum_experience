@@ -76,7 +76,7 @@ module.exports = {
                 ]
             },
             {
-                test: /\.(ttf|woff|woff2|eot)$/,
+                test: /\.(ttf|woff|woff2|eot|otf)$/,
                 use: [ 
                     {
                         loader : 'file-loader',
@@ -90,6 +90,15 @@ module.exports = {
                     {
                         loader : 'file-loader',
                         options: { outputPath : 'models/' }
+                    }
+                ]
+            },
+            {
+                test: /\.(mp3)$/,
+                use: [ 
+                    {
+                        loader : 'file-loader',
+                        options: { outputPath : 'songs/' }
                     }
                 ]
             }
