@@ -33,7 +33,7 @@ export default class Rocket
                 {
                     const child = gltf.scene.children[0]
                     this.group.scale.set(0.2, 0.2, 0.2)
-                    this.group.position.set(0, 0.66, 0)
+                    this.group.position.set(2.5, 1.6, 0)
                     this.group.add(child)
                 }
             }

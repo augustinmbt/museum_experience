@@ -1,8 +1,6 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import Museum from './glTF-Binary/museum.glb'
-import Earth from './javascript/Earth.js'
-import Astronaut from './javascript/Astronaut.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { TweenMax } from 'gsap'
 import { Vector3 } from 'three'
@@ -119,14 +117,3 @@ const helper2 = new THREE.DirectionalLightHelper( directionalLight2, 5 );
 
 scene.add( helper );
 scene.add( helper2 );
-
-// EARTH 
-
-const earth = new Earth()
-scene.add(earth.group)
-
-const astronaut = new Astronaut()
-scene.add(astronaut.group)
-
-
-
