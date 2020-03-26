@@ -6,36 +6,37 @@ import IntroSong from '../assets/intro.mp3'
 
 export default class ContentAnim {
     constructor() {
-        this.initWebGl = false
 
-        this.$exploreBtn = document.querySelector('.launch')
         this.$homeContent = document.querySelector('.home')
         this.$welcomeContent = document.querySelector('.welcome')
 
         this.song = new Audio(IntroSong)
 
-        this.$exploreBtn.addEventListener('click', () => {
-            const home = new Home()
-            home.setFlyControls()
-            this.initWebGl = true
+        // this.$exploreBtn.addEventListener('click', () => {
+        //     const home = new Home()
+
+        //     home.explorer = true
+        //     home.setFlyControls()
             
-            this.song.play()
-            this.$welcomeContent.style.display = 'flex'
+        //     // console.log(home.explorer);
+            
+        //     // this.song.play()
+        //     // this.$welcomeContent.style.display = 'flex'
 
 
-            this.$homeContent.classList.add('hide')
-            setTimeout(() => {
-                this.$homeContent.style.visibility = 'hidden'
-            }, 1000);
+        //     this.$homeContent.classList.add('hide')
+        //     setTimeout(() => {
+        //         this.$homeContent.style.visibility = 'hidden'
+        //     }, 1000);
 
-            setTimeout(() => {
-                this.$welcomeContent.classList.add('show')
-                this.showed = true
+        //     // setTimeout(() => {
+        //     //     this.$welcomeContent.classList.add('show')
+        //     //     this.showed = true
 
-                this.onWheel()
+        //     //     this.onWheel()
 
-            }, 4000)
-        })
+        //     // }, 4000)
+        // })
 
 
 

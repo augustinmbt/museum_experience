@@ -36,7 +36,6 @@ import Sputnik from './javascript/Sputnik.js'
 
 //Museum
 const home = new Home()
-// const contentAnim = new ContentAnim()
 const rocket = new Rocket()
 home.scene.add(rocket.group)
 
@@ -141,3 +140,4 @@ home.scene.add(spaceshuttle.group)
 const sputnik = new Sputnik()
 home.scene.add(sputnik.group)
 
+// const contentAnim = new ContentAnim()

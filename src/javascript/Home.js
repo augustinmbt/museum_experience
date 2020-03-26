@@ -9,9 +9,9 @@ import Stats from 'three/examples/jsm/libs/stats.module.js'
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
-import Sun from './Sun'
+import IntroSong from '../assets/intro.mp3'
 
-const sun = new Sun()
+
 
 
 
@@ -26,9 +26,36 @@ export default class Home {
         this.sizes = { width : window.innerWidth, height : window.innerHeight},
 
         this.hoverSun = false
+        this.explorer = false
         this.cursor = { x: 0 , y: 0}
 
         this.init()
+
+        this.song = new Audio(IntroSong)
+
+        if(!this.explore) {
+          this.camera.lookAt(new THREE.Vector3(0, 0, 0))
+        }
+
+        this.$homeContent = document.querySelector('.home')
+        this.$exploreBtn = document.querySelector('.launch')
+
+        this.$exploreBtn.addEventListener('click', () => {
+
+          this.explorer = true
+          this.setFlyControls()
+          
+          
+          this.song.play()
+
+
+          this.$homeContent.classList.add('hide')
+          setTimeout(() => {
+              this.$homeContent.style.visibility = 'hidden'
+          }, 1000);
+
+
+      })
 
         }
 
@@ -46,7 +73,8 @@ export default class Home {
       createCamera(){
         this.camera = new THREE.PerspectiveCamera(75, this.sizes.width / this.sizes.height, 0.1, 30)
         this.camera.position.set(0, 8, 0) 
-        this.camera.lookAt(new THREE.Vector3(0, 0, 0))
+        
+        
         this.scene.add(this.camera)
       }
 
@@ -101,8 +129,6 @@ export default class Home {
           this.cursor.y = _event.clientY / this.sizes.height - 0.5
           this.camera.position.x = this.cursor.x / 5
           this.camera.position.z = this.cursor.y / 5
-
-
         })
 
         
@@ -167,12 +193,17 @@ export default class Home {
         })
         this.introAnim()
 
-        // this.delta = this.clock.getDelta()
-        // this.controls.update(this.delta)
-        // this.controls.movementSpeed = 0.5 * this.delta
-        // this.stats.update()
+        if(this.explorer) {
+          this.goToExplore()
+          this.delta = this.clock.getDelta()
+          this.controls.update(this.delta)
+          this.controls.movementSpeed = 0.5 * this.delta
+          this.stats.update()
 
-        this.raycasting()
+        }
+
+
+        // this.raycasting()
         
         
         // Render
@@ -234,11 +265,20 @@ export default class Home {
         // console.log(this.hoverSun);
         
      }
+
+     goToExplore(){
+      
+  
+     TweenLite.to(this.camera.position, 4, {
+        //  ease :'Expo.easeOut',
+         y : 0
+      })
+     }
       
       init(){
         this.createScene()
         this.createCamera()
-        this.setCursor()
+        // this.setCursor()
         this.gltfLoader()
         this.dracoLoader()
         this.setLight()
