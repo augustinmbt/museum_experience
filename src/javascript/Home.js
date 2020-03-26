@@ -12,7 +12,8 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import IntroSong from '../assets/intro.mp3'
 
 
-
+import Sun from './Sun'
+const sun = new Sun()
 
 
 export default class Home {
@@ -26,15 +27,18 @@ export default class Home {
         this.sizes = { width : window.innerWidth, height : window.innerHeight},
 
         this.hoverSun = false
-        this.explorer = false
+        this.exploreMode = false
         this.cursor = { x: 0 , y: 0}
 
         this.init()
 
         this.song = new Audio(IntroSong)
+        this.move = false
+
 
         if(!this.explore) {
-          this.camera.lookAt(new THREE.Vector3(0, 0, 0))
+          // this.camera.position.set(0, 8, 0) 
+          this.camera.lookAt(new THREE.Vector3(0, 5, 0))
         }
 
         this.$homeContent = document.querySelector('.home')
@@ -42,29 +46,25 @@ export default class Home {
 
         this.$exploreBtn.addEventListener('click', () => {
 
-          this.explorer = true
-          this.setFlyControls()
-          
-          
-          this.song.play()
+            this.exploreMode = true
+            this.move = true
+            this.setFlyControls()
+            
+            this.song.play()
 
 
-          this.$homeContent.classList.add('hide')
-          setTimeout(() => {
-              this.$homeContent.style.visibility = 'hidden'
-          }, 1000);
+            this.$homeContent.classList.add('hide')
+            setTimeout(() => {
+                this.$homeContent.style.visibility = 'hidden'
+            }, 1000);
 
 
-      })
+        })
 
         }
 
       createScene(){
         this.scene = new THREE.Scene()
-        // this.scene.fog = new THREE.Fog(0xffffff, 2, 6)
-        // this.scene.background = new THREE.Color(0xff0000)
-        
-        
       }
     
       /**
@@ -72,9 +72,7 @@ export default class Home {
        */
       createCamera(){
         this.camera = new THREE.PerspectiveCamera(75, this.sizes.width / this.sizes.height, 0.1, 30)
-        this.camera.position.set(0, 8, 0) 
-        
-        
+        this.camera.position.set(0, -10, 0) 
         this.scene.add(this.camera)
       }
 
@@ -123,15 +121,17 @@ export default class Home {
       }
 
       setCursor(){
-        window.addEventListener('mousemove', (_event) =>
-        {
-          this.cursor.x = _event.clientX / this.sizes.width - 0.5
-          this.cursor.y = _event.clientY / this.sizes.height - 0.5
-          this.camera.position.x = this.cursor.x / 5
-          this.camera.position.z = this.cursor.y / 5
-        })
-
-        
+        if(this.exploreMode === false) {
+          window.addEventListener('mousemove', (_event) =>
+            {
+              this.cursor.x = _event.clientX / this.sizes.width - 0.5
+              this.cursor.y = _event.clientY / this.sizes.height - 0.5
+              
+              this.camera.position.x += (this.cursor.x - this.camera.position.x) * .00001
+              this.camera.position.z += (this.cursor.y - this.camera.position.z) * .00001
+          })
+        }
+           
       }
     
       gltfLoader(){
@@ -149,6 +149,8 @@ export default class Home {
             }
         )
       }
+
+
       dracoLoader() {
         this.dracoLoader = new DRACOLoader()
         this.dracoLoader.setDecoderPath('/draco/')
@@ -193,33 +195,34 @@ export default class Home {
         })
         this.introAnim()
 
-        if(this.explorer) {
-          this.goToExplore()
+        
+
+        if(this.exploreMode) {
+
+          this.raycasting()
+
+          
           this.delta = this.clock.getDelta()
           this.controls.update(this.delta)
           this.controls.movementSpeed = 0.5 * this.delta
           this.stats.update()
+        } 
 
-        }
-
-
-        // this.raycasting()
-        
-        
+        this.setCursor()
         // Render
         // this.renderer.render(this.scene, this.camera)
         this.effectComposer.render(this.scene, this.camera)
       }
     
       introAnim(){
-       TweenLite.to(this.camera.rotation, 4, {
-          //  ease :'Expo.easeOut',
-           z : Math.PI
-       })
+      //  TweenLite.to(this.camera.rotation, 4, {
+      //     //  ease :'Expo.easeOut',
+      //      z : Math.PI
+      //  })
     
        TweenLite.to(this.camera.position, 4, {
           //  ease :'Expo.easeOut',
-           y : 5
+           y : 2
        })
       }
 
@@ -238,41 +241,37 @@ export default class Home {
         
      }
 
-
-     raycasting() {
-       
-
-        this.raycaster = new THREE.Raycaster()
-        // Cursor raycasting
-        this.raycasterCursor = new THREE.Vector2(this.cursor.x * 2, - this.cursor.y * 2)
-        this.raycaster.setFromCamera(this.raycasterCursor, this.camera)
-
-        // console.log(this.cursor.x);
+     goToExplore(){
+        TweenLite.to(this.camera.position, 4, {
+          //  ease :'Expo.easeOut',
+          y : 0
+        }) 
         
-        const intersects = this.raycaster.intersectObject(sun.group)
-      
 
-        if(intersects.length)
-        {
-            this.hoverSun = true
-        }
-        else
-        {
-            this.hoverSun = false
-        }
-
-        // console.log(intersects);
-        // console.log(this.hoverSun);
-        
+        // this.camera.rotateY(Math.PI)
+        // this.camera.position.y = 0
+     
      }
 
-     goToExplore(){
+     raycasting(){
+      this.raycaster = new THREE.Raycaster()
+      // Cursor raycasting
+      this.raycasterCursor = new THREE.Vector2(this.cursor.x * 2, - this.cursor.y * 2)
+      this.raycaster.setFromCamera(this.raycasterCursor, this.camera)
+
       
-  
-     TweenLite.to(this.camera.position, 4, {
-        //  ease :'Expo.easeOut',
-         y : 0
-      })
+      this.intersects = this.raycaster.intersectObject(sun.group)
+
+      if(this.intersects.length)
+      {
+          this.hoverSun = true
+      }
+      else
+      {
+          this.hoverSun = false
+      }
+
+      console.log(this.hoverSun)
      }
       
       init(){
