@@ -12,8 +12,15 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import IntroSong from '../assets/intro.mp3'
 
 
+import  Earth from './Earth'
+const earth = new Earth()
+// earth.group.visible = false
+
+
 import Sun from './Sun'
+import { PointLight } from 'three'
 const sun = new Sun()
+
 
 
 export default class Home {
@@ -32,8 +39,10 @@ export default class Home {
 
         this.init()
 
+        console.log(this.scene.children);
+        
         this.song = new Audio(IntroSong)
-        this.move = false
+        this.song.loop = true
 
 
         if(!this.explore) {
@@ -47,7 +56,6 @@ export default class Home {
         this.$exploreBtn.addEventListener('click', () => {
 
             this.exploreMode = true
-            this.move = true
             this.setFlyControls()
             
             this.song.play()
@@ -65,6 +73,7 @@ export default class Home {
 
       createScene(){
         this.scene = new THREE.Scene()
+        this.scene.add(earth.group)
       }
     
       /**
@@ -138,14 +147,13 @@ export default class Home {
 
     
       setLight(){
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.2)
-        // this.scene.add(ambientLight)
-        
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.3)
+        const pointLight = new THREE.PointLight(0xffffff, .2)
     
-        const directionalLight = new THREE.DirectionalLight(0x555555, .07)
-        const directionalLight2 = new THREE.DirectionalLight(0x555555, .07)
-        const directionalLight3 = new THREE.DirectionalLight(0x555555, .07)
-        const directionalLight4 = new THREE.DirectionalLight(0x555555, .07)
+        const directionalLight = new THREE.DirectionalLight(0x555555, .05)
+        const directionalLight2 = new THREE.DirectionalLight(0x555555, .05)
+        const directionalLight3 = new THREE.DirectionalLight(0x555555, .05)
+        const directionalLight4 = new THREE.DirectionalLight(0x555555, .05)
     
     
     
@@ -156,43 +164,21 @@ export default class Home {
         directionalLight.position.x = 5
         directionalLight.position.y = 15
         directionalLight.position.z = 0
+        
+        pointLight.position.set(0, 4, 0)
     
-    
-        this.scene.add(directionalLight)
-        this.scene.add(ambientLight)
-        this.scene.add(directionalLight2)
-        this.scene.add(directionalLight3)
-        this.scene.add(directionalLight4)
+        // this.scene.add(directionalLight)
+        // this.scene.add(ambientLight)
+        // this.scene.add(directionalLight2)
+        // this.scene.add(directionalLight3)
+        // this.scene.add(directionalLight4)
+        this.scene.add(pointLight)
+        
     
       }
       
     
-      loop() {
-
-        window.requestAnimationFrame(()=> {
-
-          this.loop()
-        })
-        this.introAnim()
-
-        
-
-        if(this.exploreMode) {
-
-          this.raycasting()
-
-          
-          this.delta = this.clock.getDelta()
-          this.controls.update(this.delta)
-          this.controls.movementSpeed = 0.5 * this.delta
-          this.stats.update()
-        } 
-
-        this.setCursor()
-        // Render
-        // this.renderer.render(this.scene, this.camera)
-        this.effectComposer.render(this.scene, this.camera)
-      }
+      
     
       introAnim(){
       //  TweenLite.to(this.camera.rotation, 4, {
@@ -217,8 +203,6 @@ export default class Home {
         this.unrealPass.radius = 0.4
         this.unrealPass.threshold = 0.05
         this.effectComposer.addPass(this.unrealPass)
-
-        
      }
 
      goToExplore(){
@@ -226,33 +210,47 @@ export default class Home {
           //  ease :'Expo.easeOut',
           y : 0
         }) 
-        
-
-        // this.camera.rotateY(Math.PI)
-        // this.camera.position.y = 0
-     
      }
 
      raycasting(){
-      this.raycaster = new THREE.Raycaster()
-      // Cursor raycasting
-      this.raycasterCursor = new THREE.Vector2(this.cursor.x * 2, - this.cursor.y * 2)
-      this.raycaster.setFromCamera(this.raycasterCursor, this.camera)
+        this.raycaster = new THREE.Raycaster()
+        // Cursor raycasting
+        this.raycasterCursor = new THREE.Vector2(this.cursor.x * 2, - this.cursor.y * 2)
+        this.raycaster.setFromCamera(this.raycasterCursor, this.camera)
 
-      
-      this.intersects = this.raycaster.intersectObject(sun.group)
+        
+        this.intersects = this.raycaster.intersectObject(earth.group)
 
-      if(this.intersects.length)
-      {
+        if(this.intersects.length){
           this.hoverSun = true
-      }
-      else
-      {
+        }
+        else{
           this.hoverSun = false
-      }
-
-      console.log(this.hoverSun)
+        }
+        console.log(this.hoverSun)
      }
+
+     loop() {
+
+      window.requestAnimationFrame(()=> {
+
+        this.loop()
+      })
+      this.introAnim()
+
+      if(this.exploreMode) {
+
+        this.delta = this.clock.getDelta()
+        this.controls.update(this.delta)
+        this.controls.movementSpeed = 0.5 * this.delta
+        this.stats.update()
+      } 
+
+      this.setCursor()
+      // Render
+      // this.renderer.render(this.scene, this.camera)
+      this.effectComposer.render(this.scene, this.camera)
+    }
       
       init(){
         this.createScene()
