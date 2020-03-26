@@ -1,24 +1,26 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import AsteroidsModel from '../../models/glTF-Binary/asteroide.glb'
 
-export default class LoaderModel
+export default class Asteroids4
 {
-    constructor(_model)
+    constructor()
     {
         this.group = new THREE.Group()
 
         const gltfLoader = new GLTFLoader()
         gltfLoader.load(
-            _model, 
+        AsteroidsModel, 
             (gltf) =>
             {
                 while(gltf.scene.children.length)
                 {
-                    this.child = gltf.scene.children[0]
-                    this.group.add(this.child)
+                    const child = gltf.scene.children[0]
+                    this.group.scale.set(0.02, 0.02, 0.02)
+                    this.group.position.set(-0.2, 4, - 0.4)
+                    this.group.add(child)
                 }
             }
         )
-
     }
 }

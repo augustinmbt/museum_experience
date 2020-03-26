@@ -1,8 +1,8 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import AstronautModel from '../models/glTF-Binary/astronaut.glb'
+import UfoModel from '../models/glTF-Binary/ufo.glb'
 
-export default class Astronaut
+export default class Ufo
 {
     constructor()
     {
@@ -10,19 +10,17 @@ this.group = new THREE.Group()
 
 const gltfLoader = new GLTFLoader()
 gltfLoader.load(
-    AstronautModel, 
+    UfoModel, 
     (gltf) =>
     {
         while(gltf.scene.children.length)
         {
             const child = gltf.scene.children[0]
-            this.group.scale.set(0.2, 0.2, 0.2)
-            this.group.position.set(-0.3, 0.45, -1.75)
+            this.group.scale.set(3, 3, 3)
+            this.group.position.set(0, 4, 0)
             this.group.add(child)
         }
     }
 )
-
     }
 }
-

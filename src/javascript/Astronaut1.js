@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import AstronautModel from '../models/glTF-Binary/astronaut.glb'
 
-export default class Astronaut
+export default class Astronaut1
 {
     constructor()
     {
@@ -17,7 +17,7 @@ gltfLoader.load(
         {
             const child = gltf.scene.children[0]
             this.group.scale.set(0.2, 0.2, 0.2)
-            this.group.position.set(-0.3, 0.45, -1.75)
+            this.group.position.set(0.67, 0.45, -1.75)
             this.group.add(child)
         }
     }
@@ -25,4 +25,3 @@ gltfLoader.load(
 
     }
 }
-

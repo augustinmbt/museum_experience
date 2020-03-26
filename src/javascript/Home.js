@@ -4,6 +4,14 @@ import Museum from '../models/glTF-Binary/museum.glb'
 import TweenLite from 'gsap'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { FlyControls } from 'three/examples/jsm/controls/FlyControls.js';
+import Stats from 'three/examples/jsm/libs/stats.module.js'
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
+import Sun from './Sun'
+
+const sun = new Sun()
 
 
 
@@ -17,11 +25,14 @@ export default class Home {
         this.renderer = null,
         this.sizes = { width : window.innerWidth, height : window.innerHeight},
 
+        this.hoverSun = false
+        this.cursor = { x: 0 , y: 0}
+
         this.init()
 
         }
 
-    createScene(){
+      createScene(){
         this.scene = new THREE.Scene()
         // this.scene.fog = new THREE.Fog(0xffffff, 2, 6)
         // this.scene.background = new THREE.Color(0xff0000)
@@ -33,27 +44,41 @@ export default class Home {
        * Camera
        */
       createCamera(){
-        this.camera = new THREE.PerspectiveCamera(75, this.sizes.width / this.sizes.height, 0.1, 20)
+        this.camera = new THREE.PerspectiveCamera(75, this.sizes.width / this.sizes.height, 0.1, 30)
         this.camera.position.set(0, 8, 0) 
-        // this.camera.lookAt(this.scene.position)
-
-        
-    
-      
-        
+        this.camera.lookAt(new THREE.Vector3(0, 0, 0))
         this.scene.add(this.camera)
+      }
+
+      setFlyControls() {
+        this.controls = new FlyControls( this.camera, this.renderer.domElement )
+
+				this.controls.domElement = this.renderer.domElement;
+        this.controls.movementSpeed = 1000;
+				this.controls.rollSpeed = Math.PI / 24;
+				this.controls.autoForward = true;
+        this.controls.dragToLook = false;
+        
+        this.clock = new THREE.Clock()
+
+        this.stats = new Stats();
+				document.body.appendChild( this.stats.dom );
+
       }
     
       createRender(){
-        this.renderer = new THREE.WebGLRenderer( {alpha : true} )
+        this.renderer = new THREE.WebGLRenderer( { antialias : true } )
         this.renderer.setSize(this.sizes.width, this.sizes.height)
         this.renderer.setPixelRatio(window.devicePixelRatio)
         document.body.appendChild(this.renderer.domElement)
         
+        this.renderer.gammaOutput = true
+        this.renderer.gammaFactor = 2.2
+        
 
-        const cameraControls = new OrbitControls(this.camera, this.renderer.domElement)
-        cameraControls.zoomSpeed = 1
-        cameraControls.enableDamping = true
+        // const cameraControls = new OrbitControls(this.camera, this.renderer.domElement)
+        // cameraControls.zoomSpeed = 1
+        // cameraControls.enableDamping = true
         
       }
     
@@ -65,7 +90,16 @@ export default class Home {
               this.renderer.setSize(this.sizes.width, this.sizes.height);
               this.camera.aspect = (this.sizes.width / this.sizes.height);
               this.camera.updateProjectionMatrix();
+              this.effectComposer.setSize(this.sizes.width, this.sizes.height)
     
+      }
+
+      setCursor(){
+        window.addEventListener('mousemove', (_event) =>
+        {
+          this.cursor.x = _event.clientX / this.sizes.width - 0.5
+          this.cursor.y = _event.clientY / this.sizes.height - 0.5
+        })
       }
     
       gltfLoader(){
@@ -90,15 +124,14 @@ export default class Home {
       }
     
       setLight(){
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.3)
-        this.scene.add(ambientLight)
-        console.log(ambientLight);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.2)
+        // this.scene.add(ambientLight)
         
     
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1)
-        const directionalLight2 = new THREE.DirectionalLight(0xffffff, 1)
-        const directionalLight3 = new THREE.DirectionalLight(0xffffff, 1)
-        const directionalLight4 = new THREE.DirectionalLight(0xffffff, 1)
+        const directionalLight = new THREE.DirectionalLight(0x555555, .07)
+        const directionalLight2 = new THREE.DirectionalLight(0x555555, .07)
+        const directionalLight3 = new THREE.DirectionalLight(0x555555, .07)
+        const directionalLight4 = new THREE.DirectionalLight(0x555555, .07)
     
     
     
@@ -123,36 +156,92 @@ export default class Home {
       loop() {
 
         window.requestAnimationFrame(()=> {
+
           this.loop()
         })
-        // this.introAnim()
-    
-    
+        this.introAnim()
+
+        // this.delta = this.clock.getDelta()
+        // this.controls.update(this.delta)
+        // this.controls.movementSpeed = 0.5 * this.delta
+        // this.stats.update()
+
+        this.raycasting()
+        
+        
         // Render
-        this.renderer.render(this.scene, this.camera)
+        // this.renderer.render(this.scene, this.camera)
+        this.effectComposer.render(this.scene, this.camera)
       }
     
-      // introAnim(){
-      //  TweenLite.to(this.camera.rotation, 4, {
-      //     //  ease :'Expo.easeOut',
-      //      z : Math.PI
-      //  })
+      introAnim(){
+       TweenLite.to(this.camera.rotation, 4, {
+          //  ease :'Expo.easeOut',
+           z : Math.PI
+       })
     
-      //  TweenLite.to(this.camera.position, 4, {
-      //     //  ease :'Expo.easeOut',
-      //      y : 3
-      //  })
-      // }
+       TweenLite.to(this.camera.position, 4, {
+          //  ease :'Expo.easeOut',
+           y : 5
+       })
+      }
+
+      postProcess(){
+        this.effectComposer = new EffectComposer(this.renderer)
+
+        this.renderPass = new RenderPass(this.scene, this.camera)
+        this.effectComposer.addPass(this.renderPass)
+
+        this.unrealPass = new UnrealBloomPass(new THREE.Vector2(this.sizes.width, this.sizes.height))
+        this.unrealPass.strength = 0.6
+        this.unrealPass.radius = 0.4
+        this.unrealPass.threshold = 0.05
+        this.effectComposer.addPass(this.unrealPass)
+
+        
+     }
+
+
+     raycasting() {
+       
+
+        this.raycaster = new THREE.Raycaster()
+        // Cursor raycasting
+        this.raycasterCursor = new THREE.Vector2(this.cursor.x * 2, - this.cursor.y * 2)
+        this.raycaster.setFromCamera(this.raycasterCursor, this.camera)
+
+        // console.log(this.cursor.x);
+        
+        const intersects = this.raycaster.intersectObject(sun.group)
+      
+
+        if(intersects.length)
+        {
+            this.hoverSun = true
+        }
+        else
+        {
+            this.hoverSun = false
+        }
+
+        // console.log(intersects);
+        // console.log(this.hoverSun);
+        
+     }
       
       init(){
         this.createScene()
         this.createCamera()
+        this.setCursor()
         this.gltfLoader()
         this.dracoLoader()
         this.setLight()
         this.createRender()
+        this.postProcess()
         this.onResize()
+        // this.setFlyControls()
         this.loop()
+
     }
 
 }
