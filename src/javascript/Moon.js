@@ -1,15 +1,16 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import MoonModel from '../models/glTF-Binary/moon.glb'
+import LoaderModel from './LoaderModel'
+import EarthModel from '../models/glTF-Binary/Earth.glb'
 
 export default class Moon
 {
     constructor()
     {
-this.group = new THREE.Group()
-
-const gltfLoader = new GLTFLoader()
-gltfLoader.load(
+        this.group = new THREE.Group()
+        this.loaderModel = new LoaderModel()
+        this.loaderModel.gltfLoader.load(
     MoonModel, 
     (gltf) =>
     {
