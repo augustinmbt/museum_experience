@@ -134,9 +134,9 @@ home.scene.add(astronaut1.group)
 const astronaut2 = new Astronaut2()
 home.scene.add(astronaut2.group)
 
-//Spaceshuttle
-// const spaceshuttle = new Spaceshuttle()
-// home.scene.add(spaceshuttle.group)
+// Spaceshuttle
+const spaceshuttle = new Spaceshuttle()
+home.scene.add(spaceshuttle.group)
 
 //Sputnik
 const sputnik = new Sputnik()
