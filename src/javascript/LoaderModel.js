@@ -5,7 +5,7 @@ export default class LoaderModel
 {
     constructor(_model)
     {
-        this.group = new THREE.Object3D()
+        this.group = new THREE.Group()
 
         const gltfLoader = new GLTFLoader()
         gltfLoader.load(
@@ -14,10 +14,8 @@ export default class LoaderModel
             {
                 while(gltf.scene.children.length)
                 {
-                    const child = gltf.scene.children[0]
-                    this.group.scale.set(0.2, 0.2, 0.2)
-                    this.group.position.set(0, 0.66, 0)
-                    this.group.add(child)
+                    this.child = gltf.scene.children[0]
+                    this.group.add(this.child)
                 }
             }
         )

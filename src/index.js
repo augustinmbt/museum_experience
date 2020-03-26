@@ -1,10 +1,9 @@
 import './styles/main.scss'
 // import './experience'
-import './javascript/Home'
 import Home from './javascript/Home'
-// import ContentAnim from './javascript/ContentAnim'
+import ContentAnim from './javascript/ContentAnim'
 import Rocket from './javascript/Rocket'
-import Sun from './javascript/Sun.js'
+import Sun from './javascript/Sun'
 import Astronaut from './javascript/Astronaut.js'
 import Astronaut1 from './javascript/Astronaut1.js'
 import Astronaut2 from './javascript/Astronaut2.js'
@@ -37,7 +36,7 @@ import Sputnik from './javascript/Sputnik.js'
 
 //Museum
 const home = new Home()
-// const contentAnim = new ContentAnim()
+const contentAnim = new ContentAnim()
 const rocket = new Rocket()
 home.scene.add(rocket.group)
 
@@ -141,3 +140,4 @@ home.scene.add(spaceshuttle.group)
 //Sputnik
 const sputnik = new Sputnik()
 home.scene.add(sputnik.group)
+

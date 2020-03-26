@@ -2,10 +2,12 @@ import Home from './Home'
 import IntroSong from '../assets/intro.mp3'
 
 
-const home = new Home()
+// const home = new Home()
 
 export default class ContentAnim {
     constructor() {
+        this.initWebGl = false
+
         this.$exploreBtn = document.querySelector('.launch')
         this.$homeContent = document.querySelector('.home')
         this.$welcomeContent = document.querySelector('.welcome')
@@ -13,7 +15,10 @@ export default class ContentAnim {
         this.song = new Audio(IntroSong)
 
         this.$exploreBtn.addEventListener('click', () => {
-            // home.loop()
+            const home = new Home()
+            home.loop()
+            this.initWebGl = true
+            
             this.song.play()
             this.$welcomeContent.style.display = 'flex'
 
