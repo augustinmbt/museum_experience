@@ -1,24 +1,16 @@
 import * as THREE from 'three'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 export default class LoaderModel
 {
-    constructor(_model)
+    constructor()
     {
-        this.group = new THREE.Group()
-
-        const gltfLoader = new GLTFLoader()
-        gltfLoader.load(
-            _model, 
-            (gltf) =>
-            {
-                while(gltf.scene.children.length)
-                {
-                    this.child = gltf.scene.children[0]
-                    this.group.add(this.child)
-                }
-            }
-        )
+        this.gltfLoader = new GLTFLoader()
+        this.dracoLoader = new DRACOLoader()
+        this.dracoLoader.setDecoderPath('/draco/')
+        this.gltfLoader.setDRACOLoader(this.dracoLoader)
 
     }
+    
 }
