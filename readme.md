@@ -1,16 +1,13 @@
-# Webpack template
+# Astronomy Museum Experience
 
 ## Features
-- Basic files support (html, css, js, stylus, fonts, images)
-- Extracted CSS
-- Transpiling (with Babel)
-- Sourcemaps
-- Clean dist
-- Dev server with local network support
-- Static files
-- Cache breaker
+- Made with THREE.Js
+- FlyControls
+- Camera Animation
+- Raycasting
 
 ## Instructions
+
 
 Install dependencies
 

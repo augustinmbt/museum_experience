@@ -134,28 +134,8 @@ export default class Home {
            
       }
     
-      gltfLoader(){
-        this.gltfLoader = new GLTFLoader()
-        this.gltfLoader.load(
-            Museum, 
-            (gltf) =>
-            {
-                while(gltf.scene.children.length)
-                {
-                    const child = gltf.scene.children[0]
-                    this.scene.add(child)
-                    child.position.set(0, 2, 0)
-                }
-            }
-        )
-      }
 
 
-      dracoLoader() {
-        this.dracoLoader = new DRACOLoader()
-        this.dracoLoader.setDecoderPath('/draco/')
-        this.gltfLoader.setDRACOLoader(this.dracoLoader)
-      }
     
       setLight(){
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.2)
@@ -278,8 +258,6 @@ export default class Home {
         this.createScene()
         this.createCamera()
         // this.setCursor()
-        this.gltfLoader()
-        this.dracoLoader()
         this.setLight()
         this.createRender()
         this.postProcess()

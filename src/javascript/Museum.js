@@ -1,24 +1,23 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import VenusModel from '../models/glTF-Binary/venus.glb'
+import MuseumModel from '../models/glTF-Binary/museum.glb'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import LoaderModel from './LoaderModel'
 
-export default class Venus
+export default class Museum
 {
     constructor()
     {
         this.group = new THREE.Group()
         this.loaderModel = new LoaderModel()
         this.loaderModel.gltfLoader.load(
-            VenusModel, 
+            MuseumModel, 
             (gltf) =>
             {
                 while(gltf.scene.children.length)
                 {
                     const child = gltf.scene.children[0]
-                    this.group.scale.set(0.02, 0.02, 0.02)
-                    this.group.position.set(0.6, 4.4, -0.8)
+                    child.position.set(0, 2, 0)
                     this.group.add(child)
                 }
             }
