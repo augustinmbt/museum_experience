@@ -99,7 +99,13 @@ export default class Home {
         {
           this.cursor.x = _event.clientX / this.sizes.width - 0.5
           this.cursor.y = _event.clientY / this.sizes.height - 0.5
+          this.camera.position.x = this.cursor.x / 5
+          this.camera.position.z = this.cursor.y / 5
+
+
         })
+
+        
       }
     
       gltfLoader(){

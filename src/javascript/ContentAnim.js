@@ -16,7 +16,7 @@ export default class ContentAnim {
 
         this.$exploreBtn.addEventListener('click', () => {
             const home = new Home()
-            home.loop()
+            home.setFlyControls()
             this.initWebGl = true
             
             this.song.play()
