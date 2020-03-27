@@ -52,8 +52,10 @@ export default class Home {
         this.$controllers = document.querySelector('.controllers')
         this.$rocketBtn = document.querySelector('.js-rocket-launch')
         this.$planetRotateBtn = document.querySelector('.js-planet-rotate')
+        this.$sunModeBtn = document.querySelector('.js-sun-mode')
         this.launchRocket = false
         this.rotationMode = false
+        this.sunMode = false
         this.planets = [mercury, mars, earth, venus, uranus, saturn, jupiter, neptune]
 
 
@@ -74,13 +76,16 @@ export default class Home {
           
 
           this.launchRocketSong.play()
-          this.$rocketBtn.classList.add('rocketLaunched')
+          this.$rocketBtn.classList.add('isActive')
 
           this.launchRocket = true
           this.$rocketBtn.innerHTML ='Lauching...'
+        })
+
+        this.$sunModeBtn.addEventListener('click', ()=> {
+          this.$sunModeBtn.classList.toggle('isActive')
 
           
-
         })
 
         if(!this.explore) {
@@ -121,7 +126,7 @@ export default class Home {
  
       createCamera(){
         this.camera = new THREE.PerspectiveCamera(75, this.sizes.width / this.sizes.height, 0.1, 50)
-        this.camera.position.set(0, -10, 0) 
+        this.camera.position.set(5, 1, 0) 
         this.scene.add(this.camera)
       }
 
@@ -160,14 +165,14 @@ export default class Home {
 
       setCursor(){
         
-        if(this.exploreMode === false) {
+        if(this.exploreMode == false) {
           window.addEventListener('mousemove', (_event) =>
             {
               this.cursor.x = _event.clientX / this.sizes.width - 0.5
               this.cursor.y = _event.clientY / this.sizes.height - 0.5
               
-              this.camera.position.x += (this.cursor.x - this.camera.position.x) * .00001
-              this.camera.position.z += (this.cursor.y - this.camera.position.z) * .00001
+              this.camera.position.x += (this.cursor.x - this.camera.position.x) * .0001
+              this.camera.position.z += (this.cursor.y - this.camera.position.z) * .0001
           })
         }
            
@@ -175,12 +180,12 @@ export default class Home {
 
       setLight(){
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.1)
-        const pointLight = new THREE.PointLight(0xffffff, .2)
+        this.pointLight = new THREE.PointLight(0xffffff, .2)
     
-        const directionalLight = new THREE.DirectionalLight(0x555555, .05)
-        const directionalLight2 = new THREE.DirectionalLight(0x555555, .05)
-        const directionalLight3 = new THREE.DirectionalLight(0x555555, .05)
-        const directionalLight4 = new THREE.DirectionalLight(0x555555, .05)
+        const directionalLight = new THREE.DirectionalLight(0x555555, .07)
+        const directionalLight2 = new THREE.DirectionalLight(0x555555, .07)
+        const directionalLight3 = new THREE.DirectionalLight(0x555555, .07)
+        const directionalLight4 = new THREE.DirectionalLight(0x555555, .07)
     
     
     
@@ -192,14 +197,14 @@ export default class Home {
         directionalLight.position.y = 15
         directionalLight.position.z = 0
         
-        pointLight.position.set(0, 4, 0)
+        this.pointLight.position.set(0, 4, 0)
     
         this.scene.add(directionalLight)
         this.scene.add(ambientLight)
         this.scene.add(directionalLight2)
         this.scene.add(directionalLight3)
         this.scene.add(directionalLight4)
-        this.scene.add(pointLight)
+        // this.scene.add(pointLight)
         
     
       }
@@ -210,7 +215,7 @@ export default class Home {
       introAnim(){
        TweenLite.to(this.camera.position, 4, {
           //  ease :'Expo.easeOut',
-           y : 2
+           x : 0
        })
       }
 
@@ -271,6 +276,17 @@ export default class Home {
         })
        })
       }
+
+      setSunMode() {
+        if(this.$sunModeBtn.classList.contains('isActive')) {
+          this.sunMode = true
+          this.scene.add(this.pointLight)
+        } else {
+          this.sunMode = false
+          this.scene.remove(this.pointLight)
+        }
+        
+      }
       
       
      
@@ -293,6 +309,10 @@ export default class Home {
         this.planetRotation()
       }
 
+      // if(this.sunMode == true){
+        this.setSunMode()
+      // }
+
 
       if(this.exploreMode) {
         this.delta = this.clock.getDelta()
@@ -314,7 +334,6 @@ export default class Home {
         this.postProcess()
         this.onResize()
         this.loop()
-
     }
 
 }

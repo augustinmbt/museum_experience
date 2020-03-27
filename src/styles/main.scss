@@ -178,7 +178,7 @@ body {
     opacity: 1;
   }
 
-  .rocketLaunched::before {
+  .isActive::before {
     transform: translateX(100%);
 
   }
