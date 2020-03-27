@@ -121,14 +121,14 @@ export default class Home {
  
       createCamera(){
         this.camera = new THREE.PerspectiveCamera(75, this.sizes.width / this.sizes.height, 0.1, 50)
-        this.camera.position.set(5, 1, 0) 
+        this.camera.position.set(0, -10, 0) 
         this.scene.add(this.camera)
       }
 
       setFlyControls() {
         this.controls = new FlyControls( this.camera, this.renderer.domElement )
 				this.controls.domElement = this.renderer.domElement;
-        this.controls.movementSpeed = 1000;
+        this.controls.movementSpeed = 100;
 				this.controls.rollSpeed = Math.PI / 24;
 				this.controls.autoForward = true;
         this.controls.dragToLook = false;
@@ -271,6 +271,7 @@ export default class Home {
         })
        })
       }
+      
       
      
 
