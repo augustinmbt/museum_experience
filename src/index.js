@@ -10,7 +10,6 @@ import Sun from './javascript/Sun'
 import Meteor from './javascript/Meteor.js'
 import Moon from './javascript/Moon.js'
 
-
 // Asteroids
 import Asteroids from './javascript/asteroids/Asteroids.js'
 import Asteroids1 from './javascript/asteroids/Asteroids1.js'
@@ -32,9 +31,6 @@ import Ufo from './javascript/Ufo.js'
 import Astronaut from './javascript/Astronaut.js'
 import Astronaut1 from './javascript/Astronaut1.js'
 import Astronaut2 from './javascript/Astronaut2.js'
-
-
-
 
 const home = new Home()
 
