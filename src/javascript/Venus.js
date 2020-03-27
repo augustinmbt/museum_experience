@@ -18,7 +18,7 @@ export default class Venus
                 {
                     const child = gltf.scene.children[0]
                     this.group.scale.set(0.02, 0.02, 0.02)
-                    this.group.position.set(0.6, 4.4, -0.8)
+                    this.group.position.set(-2, 4.4, -0.8)
                     this.group.add(child)
                 }
             }

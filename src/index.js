@@ -1,10 +1,9 @@
 import './styles/main.scss'
 // import './experience'
 import Home from './javascript/Home'
-import ContentAnim from './javascript/ContentAnim'
 import Museum from './javascript/Museum'
 
-import Rocket from './javascript/Rocket'
+// import Rocket from './javascript/Rocket'
 import Sun from './javascript/Sun'
 import Astronaut from './javascript/Astronaut.js'
 import Astronaut1 from './javascript/Astronaut1.js'
@@ -44,17 +43,14 @@ const museum = new Museum()
 home.scene.add(museum.group)
 
 //Rocket
-const rocket = new Rocket()
-home.scene.add(rocket.group)
+// const rocket = new Rocket()
+// home.scene.add(rocket.group)
 
 //Sun
 const sun = new Sun()
 home.scene.add(sun.group)
 // sun.group.visible = false
 
-//Earth
-const earth = new Earth()
-home.scene.add(earth.group)
 
 // //Meteor
 const meteor = new Meteor()
@@ -84,40 +80,40 @@ home.scene.add(jupiter.group)
 const neptune = new Neptune()
 home.scene.add(neptune.group)
 
-// //Saturne 
+//Saturne 
 const saturn = new Saturn()
 home.scene.add(saturn.group)
 
-// //Venus
+//Venus
 const venus = new Venus()
 home.scene.add(venus.group)
 
 //Ufo
-const ufo = new Ufo()
-home.scene.add(ufo.group)
+// const ufo = new Ufo()
+// home.scene.add(ufo.group)
 
 //Asteroids
 const asteroids = new Asteroids()
 home.scene.add(asteroids.group)
 
-const asteroids1 = new Asteroids1()
-home.scene.add(asteroids1.group)
+// const asteroids1 = new Asteroids1()
+// home.scene.add(asteroids1.group)
 
-const asteroids2 = new Asteroids2()
-home.scene.add(asteroids2.group)
+// const asteroids2 = new Asteroids2()
+// home.scene.add(asteroids2.group)
 
-const asteroids3 = new Asteroids3()
-home.scene.add(asteroids3.group)
+// const asteroids3 = new Asteroids3()
+// home.scene.add(asteroids3.group)
 
-const asteroids4 = new Asteroids4()
-home.scene.add(asteroids4.group)
+// const asteroids4 = new Asteroids4()
+// home.scene.add(asteroids4.group)
 
-const asteroids5 = new Asteroids5()
-home.scene.add(asteroids5.group)
+// const asteroids5 = new Asteroids5()
+// home.scene.add(asteroids5.group)
 
-//Spaceship
-const spaceship = new Spaceship()
-home.scene.add(spaceship.group)
+// //Spaceship
+// const spaceship = new Spaceship()
+// home.scene.add(spaceship.group)
 
 // Sign
 const sign = new Sign()

@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import EarthModel from '../models/glTF-Binary/fusee.glb'
+import RocketModel from '../models/glTF-Binary/fusee.glb'
 
 export default class Rocket
 {
@@ -10,7 +10,7 @@ export default class Rocket
 
         const gltfLoader = new GLTFLoader()
         gltfLoader.load(
-            EarthModel, 
+            RocketModel, 
             (gltf) =>
             {
                 while(gltf.scene.children.length)

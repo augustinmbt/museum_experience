@@ -3,23 +3,20 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import Museum from '../models/glTF-Binary/museum.glb'
 import TweenLite from 'gsap'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { FlyControls } from 'three/examples/jsm/controls/FlyControls.js';
-import Stats from 'three/examples/jsm/libs/stats.module.js'
+// import Stats from 'three/examples/jsm/libs/stats.module.js'
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
 import IntroSong from '../assets/intro.mp3'
+import LaunchRocketSong from '../assets/launchRocket.mp3'
+// import RocketLauncher from './RocketLauncher'
+import Rocket from './Rocket'
+import Earth from './Earth'
 
 
-import  Earth from './Earth'
+const rocket = new Rocket()
 const earth = new Earth()
-// earth.group.visible = false
-
-
-import Sun from './Sun'
-import { PointLight } from 'three'
-const sun = new Sun()
 
 
 
@@ -32,62 +29,75 @@ export default class Home {
         this.camera = null,
         this.renderer = null,
         this.sizes = { width : window.innerWidth, height : window.innerHeight},
-
         this.hoverSun = false
         this.exploreMode = false
         this.cursor = { x: 0 , y: 0}
+        this.$homeContent = document.querySelector('.home')
+        this.$exploreBtn = document.querySelector('.launch')
+        this.$controllers = document.querySelector('.controllers')
+        this.$rocketBtn = document.querySelector('.js-rocket-launch')
+        this.launchRocket = false
 
-        this.init()
 
-        console.log(this.scene.children);
-        
+        //Music
         this.song = new Audio(IntroSong)
+        this.launchRocketSong = new Audio(LaunchRocketSong)
         this.song.loop = true
 
 
-        if(!this.explore) {
-          // this.camera.position.set(0, 8, 0) 
-          this.camera.lookAt(new THREE.Vector3(0, 5, 0))
-        }
+        //Calling Methods
+        this.init()
+        this.launcherExperience() 
 
-        this.$homeContent = document.querySelector('.home')
-        this.$exploreBtn = document.querySelector('.launch')
+        
+        
+        
+        this.$rocketBtn.addEventListener('click', ()=> {
+          
 
-        this.$exploreBtn.addEventListener('click', () => {
+          this.launchRocketSong.play()
+          this.$rocketBtn.classList.add('rocketLaunched')
 
-            this.exploreMode = true
-            this.setFlyControls()
-            
-            this.song.play()
+          this.launchRocket = true
+          this.$rocketBtn.innerHTML ='Lauching...'
 
-
-            this.$homeContent.classList.add('hide')
-            setTimeout(() => {
-                this.$homeContent.style.visibility = 'hidden'
-            }, 1000);
-
+          
 
         })
 
+        if(!this.explore) {
+          this.camera.lookAt(new THREE.Vector3(0, 5, 0))
         }
+      }
+
+      launcherExperience(){
+        this.$exploreBtn.addEventListener('click', () => {
+          this.exploreMode = true
+          this.setFlyControls()
+          this.song.play()
+
+          //Hide home Content
+          this.$homeContent.classList.add('hide')
+          setTimeout(() => {
+              this.$controllers.style.transform = 'translateY(0)'
+              this.$homeContent.style.visibility = 'hidden'
+          }, 1000);
+        })
+      }
 
       createScene(){
         this.scene = new THREE.Scene()
-        this.scene.add(earth.group)
+        this.scene.add(rocket.group)
       }
-    
-      /**
-       * Camera
-       */
+ 
       createCamera(){
-        this.camera = new THREE.PerspectiveCamera(75, this.sizes.width / this.sizes.height, 0.1, 30)
+        this.camera = new THREE.PerspectiveCamera(75, this.sizes.width / this.sizes.height, 0.1, 50)
         this.camera.position.set(0, -10, 0) 
         this.scene.add(this.camera)
       }
 
       setFlyControls() {
         this.controls = new FlyControls( this.camera, this.renderer.domElement )
-
 				this.controls.domElement = this.renderer.domElement;
         this.controls.movementSpeed = 1000;
 				this.controls.rollSpeed = Math.PI / 24;
@@ -96,8 +106,8 @@ export default class Home {
         
         this.clock = new THREE.Clock()
 
-        this.stats = new Stats();
-				document.body.appendChild( this.stats.dom );
+        // this.stats = new Stats();
+				// document.body.appendChild( this.stats.dom );
 
       }
     
@@ -109,27 +119,18 @@ export default class Home {
         
         this.renderer.gammaOutput = true
         this.renderer.gammaFactor = 2.2
-        
 
-        // const cameraControls = new OrbitControls(this.camera, this.renderer.domElement)
-        // cameraControls.zoomSpeed = 1
-        // cameraControls.enableDamping = true
-        
       }
-    
-      /**
-       * OnResize
-       */
+
       onResize() {
-    
-              this.renderer.setSize(this.sizes.width, this.sizes.height);
-              this.camera.aspect = (this.sizes.width / this.sizes.height);
-              this.camera.updateProjectionMatrix();
-              this.effectComposer.setSize(this.sizes.width, this.sizes.height)
-    
+          this.renderer.setSize(this.sizes.width, this.sizes.height);
+          this.camera.aspect = (this.sizes.width / this.sizes.height);
+          this.camera.updateProjectionMatrix();
+          this.effectComposer.setSize(this.sizes.width, this.sizes.height)
       }
 
       setCursor(){
+        
         if(this.exploreMode === false) {
           window.addEventListener('mousemove', (_event) =>
             {
@@ -142,12 +143,9 @@ export default class Home {
         }
            
       }
-    
 
-
-    
       setLight(){
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.3)
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.1)
         const pointLight = new THREE.PointLight(0xffffff, .2)
     
         const directionalLight = new THREE.DirectionalLight(0x555555, .05)
@@ -167,11 +165,11 @@ export default class Home {
         
         pointLight.position.set(0, 4, 0)
     
-        // this.scene.add(directionalLight)
-        // this.scene.add(ambientLight)
-        // this.scene.add(directionalLight2)
-        // this.scene.add(directionalLight3)
-        // this.scene.add(directionalLight4)
+        this.scene.add(directionalLight)
+        this.scene.add(ambientLight)
+        this.scene.add(directionalLight2)
+        this.scene.add(directionalLight3)
+        this.scene.add(directionalLight4)
         this.scene.add(pointLight)
         
     
@@ -181,11 +179,6 @@ export default class Home {
       
     
       introAnim(){
-      //  TweenLite.to(this.camera.rotation, 4, {
-      //     //  ease :'Expo.easeOut',
-      //      z : Math.PI
-      //  })
-    
        TweenLite.to(this.camera.position, 4, {
           //  ease :'Expo.easeOut',
            y : 2
@@ -207,7 +200,6 @@ export default class Home {
 
      goToExplore(){
         TweenLite.to(this.camera.position, 4, {
-          //  ease :'Expo.easeOut',
           y : 0
         }) 
      }
@@ -218,7 +210,6 @@ export default class Home {
         this.raycasterCursor = new THREE.Vector2(this.cursor.x * 2, - this.cursor.y * 2)
         this.raycaster.setFromCamera(this.raycasterCursor, this.camera)
 
-        
         this.intersects = this.raycaster.intersectObject(earth.group)
 
         if(this.intersects.length){
@@ -227,40 +218,58 @@ export default class Home {
         else{
           this.hoverSun = false
         }
-        console.log(this.hoverSun)
      }
 
+     setLaunching(){
+      TweenLite.to(rocket.group.position, 60, {
+        //  ease :'Expo.easeOut',
+         y : 20
+        })
+
+        if(rocket.group.position.y > 19){ 
+          rocket.group.position.y = 1.82
+          this.$rocketBtn.textContent = 'Relaunch ?'
+          this.$rocketBtn.classList.remove('rocketLaunched')
+        }
+          this.launchRocket = false
+
+     }
+
+     
+
      loop() {
-
-      window.requestAnimationFrame(()=> {
-
+        window.requestAnimationFrame(()=> {
         this.loop()
       })
+
       this.introAnim()
+      this.setCursor()
+      
+
+      if(this.launchRocket == true){
+        this.setLaunching()
+      }
+
 
       if(this.exploreMode) {
-
         this.delta = this.clock.getDelta()
         this.controls.update(this.delta)
         this.controls.movementSpeed = 0.5 * this.delta
-        this.stats.update()
+        // this.stats.update()
       } 
 
-      this.setCursor()
+      
       // Render
-      // this.renderer.render(this.scene, this.camera)
       this.effectComposer.render(this.scene, this.camera)
     }
       
       init(){
         this.createScene()
         this.createCamera()
-        // this.setCursor()
         this.setLight()
         this.createRender()
         this.postProcess()
         this.onResize()
-        // this.setFlyControls()
         this.loop()
 
     }
