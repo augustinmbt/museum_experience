@@ -20,8 +20,8 @@ We used GitHub to be able to work together on the same project, we only had few 
 * [x] Camera Animation
 * [x] DracoCompression
 * [x] Transpiled Code
+* [x] FlyControls
 * [ ] Raycasting
-* [ ] FlyControls
 
 ## Instructions :exclamation:
 To have the code working in local on your desktop, you need to download the folder, get to it on your Teminal and :
