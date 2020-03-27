@@ -8,16 +8,31 @@ import { FlyControls } from 'three/examples/jsm/controls/FlyControls.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
+
 import IntroSong from '../assets/intro.mp3'
 import LaunchRocketSong from '../assets/launchRocket.mp3'
-// import RocketLauncher from './RocketLauncher'
+
+
 import Rocket from './Rocket'
 import Earth from './Earth'
+import Mercury from './Mercury.js'
+import Uranus from './Uranus.js'
+import Mars from './Mars.js'
+import Neptune from './Neptune.js'
+import Jupiter from './Jupiter.js'
+import Venus from './Venus.js'
+import Saturn from './Saturn.js'
 
-
-const rocket = new Rocket()
+const mercury = new Mercury()
+const mars = new Mars()
+const uranus = new Uranus()
+const jupiter = new Jupiter()
+const neptune = new Neptune()
+const saturn = new Saturn()
+const venus = new Venus()
 const earth = new Earth()
 
+const rocket = new Rocket()
 
 
 export default class Home {
@@ -36,7 +51,10 @@ export default class Home {
         this.$exploreBtn = document.querySelector('.launch')
         this.$controllers = document.querySelector('.controllers')
         this.$rocketBtn = document.querySelector('.js-rocket-launch')
+        this.$planetRotateBtn = document.querySelector('.js-planet-rotate')
         this.launchRocket = false
+        this.rotationMode = false
+        this.planets = [mercury, mars, earth, venus, uranus, saturn, jupiter, neptune]
 
 
         //Music
@@ -49,9 +67,9 @@ export default class Home {
         this.init()
         this.launcherExperience() 
 
-        
-        
-        
+        this.$planetRotateBtn.addEventListener('click', ()=> {
+          this.rotationMode = true
+        })
         this.$rocketBtn.addEventListener('click', ()=> {
           
 
@@ -87,12 +105,23 @@ export default class Home {
 
       createScene(){
         this.scene = new THREE.Scene()
+
+        //Adding Planets
         this.scene.add(rocket.group)
+        this.scene.add(earth.group)
+        this.scene.add(mercury.group)
+        this.scene.add(uranus.group)
+        this.scene.add(venus.group)
+        this.scene.add(saturn.group)
+        this.scene.add(jupiter.group)
+        this.scene.add(mars.group)
+        this.scene.add(neptune.group)
+
       }
  
       createCamera(){
         this.camera = new THREE.PerspectiveCamera(75, this.sizes.width / this.sizes.height, 0.1, 50)
-        this.camera.position.set(0, -10, 0) 
+        this.camera.position.set(5, 1, 0) 
         this.scene.add(this.camera)
       }
 
@@ -235,6 +264,14 @@ export default class Home {
 
      }
 
+     planetRotation(){
+      this.planets.forEach(planet => {
+        TweenLite.to(planet.group.rotation, 60, {
+          y : Math.PI * Math.max(Math.floor(Math.random() * 7))
+        })
+       })
+      }
+      
      
 
      loop() {
@@ -248,6 +285,11 @@ export default class Home {
 
       if(this.launchRocket == true){
         this.setLaunching()
+      }
+
+
+      if(this.rotationMode == true){
+        this.planetRotation()
       }
 
 

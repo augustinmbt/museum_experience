@@ -16,7 +16,7 @@ gltfLoader.load(
         while(gltf.scene.children.length)
         {
             const child = gltf.scene.children[0]
-            this.group.scale.set(0.7, .7, .7)
+            this.group.scale.set(0.0002, .0002, .0002)
             this.group.position.set(0, 4, 0)
             this.group.add(child)
         }
